@@ -1,11 +1,11 @@
 
-import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
+import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 
 export interface ProductProps {
   id: string;
@@ -30,28 +30,28 @@ export function ProductCard({
   rating, 
   inStock 
 }: ProductProps) {
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  
+  const isWishlisted = isInWishlist(id);
   
   const toggleWishlist = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    setIsWishlisted(!isWishlisted);
     
-    if (!isWishlisted) {
-      toast.success("Product added to wishlist");
+    if (isWishlisted) {
+      removeFromWishlist(id);
     } else {
-      toast("Product removed from wishlist");
+      addToWishlist({ id, name, price, originalPrice, image, category, badge, rating, inStock });
     }
   };
 
-  const addToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
     if (inStock) {
-      toast.success("Product added to cart");
-    } else {
-      toast.error("Product is out of stock");
+      addToCart({ id, name, price, originalPrice, image, category, badge, rating, inStock });
     }
   };
 
@@ -130,7 +130,7 @@ export function ProductCard({
         <CardFooter className="p-4 pt-0">
           <Button 
             className="w-full" 
-            onClick={addToCart}
+            onClick={handleAddToCart}
             variant={inStock ? "default" : "outline"}
             disabled={!inStock}
           >

@@ -7,13 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, ShoppingCart, AlertCircle, TruckIcon, RotateCcw, Shield } from "lucide-react";
-import { toast } from "sonner";
 import { electronicProducts, clothingProducts, groceryProducts } from "@/data/mockData";
+import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
 
 const ProductPage = () => {
   const { id } = useParams<{ id: string }>();
   const [quantity, setQuantity] = useState(1);
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   // Find the product with the matching ID from all product categories
   const allProducts = [...electronicProducts, ...clothingProducts, ...groceryProducts];
@@ -41,17 +43,17 @@ const ProductPage = () => {
     );
   }
 
+  const isProductInWishlist = isInWishlist(product.id);
+
   const handleAddToCart = () => {
-    toast.success(`Added ${quantity} ${product.name} to your cart`);
+    addToCart(product, quantity);
   };
 
   const toggleWishlist = () => {
-    setIsWishlisted(!isWishlisted);
-    
-    if (!isWishlisted) {
-      toast.success("Added to wishlist");
+    if (isProductInWishlist) {
+      removeFromWishlist(product.id);
     } else {
-      toast("Removed from wishlist");
+      addToWishlist(product);
     }
   };
 
@@ -175,9 +177,9 @@ const ProductPage = () => {
                   onClick={toggleWishlist}
                 >
                   <Heart 
-                    className={`mr-2 h-5 w-5 ${isWishlisted ? 'fill-red-500 text-red-500' : ''}`} 
+                    className={`mr-2 h-5 w-5 ${isProductInWishlist ? 'fill-red-500 text-red-500' : ''}`} 
                   />
-                  Wishlist
+                  {isProductInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}
                 </Button>
               </div>
             </div>

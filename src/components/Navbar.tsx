@@ -1,15 +1,19 @@
 
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Search, ShoppingCart, User, Menu, X, Heart } from "lucide-react";
+import { Search, ShoppingCart, User, Menu, X, Heart, LogIn } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useCart } from "@/context/CartContext";
 
 export function Navbar() {
   const isMobile = useIsMobile();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  // Mock authentication state - replace with real auth
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { getCartCount } = useCart();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -19,6 +23,8 @@ export function Navbar() {
     { name: "Clothing", path: "/category/clothing" },
     { name: "Groceries", path: "/category/groceries" },
   ];
+
+  const cartCount = getCartCount();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background/95 backdrop-blur">
@@ -90,21 +96,32 @@ export function Navbar() {
             <Link to="/cart">
               <div className="relative">
                 <ShoppingCart className="h-5 w-5" />
-                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
-                  0
-                </span>
+                {cartCount > 0 && (
+                  <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] text-primary-foreground">
+                    {cartCount}
+                  </span>
+                )}
               </div>
               <span className="sr-only">Cart</span>
             </Link>
           </Button>
 
-          {/* Account */}
-          <Button variant="ghost" size="icon" asChild>
-            <Link to="/account">
-              <User className="h-5 w-5" />
-              <span className="sr-only">Account</span>
-            </Link>
-          </Button>
+          {/* Auth */}
+          {isAuthenticated ? (
+            <Button variant="ghost" size="icon" asChild>
+              <Link to="/account">
+                <User className="h-5 w-5" />
+                <span className="sr-only">Account</span>
+              </Link>
+            </Button>
+          ) : (
+            <Button variant="ghost" size="icon" asChild>
+              <Link to="/auth">
+                <LogIn className="h-5 w-5" />
+                <span className="sr-only">Login</span>
+              </Link>
+            </Button>
+          )}
         </div>
       </div>
 
