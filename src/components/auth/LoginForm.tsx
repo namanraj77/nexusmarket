@@ -15,6 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useAuth } from "@/context/AuthContext";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
@@ -22,7 +23,7 @@ const formSchema = z.object({
 });
 
 export function LoginForm() {
-  const [isLoading, setIsLoading] = useState(false);
+  const { signIn, isLoading } = useAuth();
   const navigate = useNavigate();
   
   const form = useForm<z.infer<typeof formSchema>>({
@@ -35,20 +36,9 @@ export function LoginForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      setIsLoading(true);
-      // This would be replaced with actual authentication logic
-      console.log("Login attempt:", values);
-      
-      // Simulate login success after a delay
-      setTimeout(() => {
-        setIsLoading(false);
-        toast.success("Successfully logged in!");
-        navigate("/");
-      }, 1000);
-      
+      await signIn(values.email, values.password);
+      navigate("/");
     } catch (error) {
-      setIsLoading(false);
-      toast.error("Failed to login. Please try again.");
       console.error(error);
     }
   }

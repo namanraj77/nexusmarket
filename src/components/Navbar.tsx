@@ -1,21 +1,32 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Search, ShoppingCart, User, Menu, X, Heart, LogIn } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
+import { Search, ShoppingCart, User, Menu, X, Heart, LogIn, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useCart } from "@/context/CartContext";
+import { useAuth } from "@/context/AuthContext";
 
 export function Navbar() {
   const isMobile = useIsMobile();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchValue, setSearchValue] = useState("");
-  // Mock authentication state - replace with real auth
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { user, signOut } = useAuth();
   const { getCartCount } = useCart();
+  const navigate = useNavigate();
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+  const handleSignOut = async () => {
+    try {
+      await signOut();
+      navigate("/");
+      setIsMenuOpen(false);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const categories = [
     { name: "All", path: "/" },
@@ -107,13 +118,21 @@ export function Navbar() {
           </Button>
 
           {/* Auth */}
-          {isAuthenticated ? (
-            <Button variant="ghost" size="icon" asChild>
-              <Link to="/account">
-                <User className="h-5 w-5" />
-                <span className="sr-only">Account</span>
-              </Link>
-            </Button>
+          {user ? (
+            <>
+              <Button variant="ghost" size="icon" asChild>
+                <Link to="/account">
+                  <User className="h-5 w-5" />
+                  <span className="sr-only">Account</span>
+                </Link>
+              </Button>
+              {!isMobile && (
+                <Button variant="ghost" size="sm" onClick={handleSignOut}>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Logout
+                </Button>
+              )}
+            </>
           ) : (
             <Button variant="ghost" size="icon" asChild>
               <Link to="/auth">
@@ -139,6 +158,17 @@ export function Navbar() {
                 {category.name}
               </Link>
             ))}
+            
+            {user && (
+              <Button 
+                variant="ghost" 
+                className="flex items-center justify-start rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
+                onClick={handleSignOut}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Logout
+              </Button>
+            )}
           </nav>
           <div className="mt-4">
             <Input

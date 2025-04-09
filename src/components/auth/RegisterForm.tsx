@@ -15,6 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useAuth } from "@/context/AuthContext";
 
 const formSchema = z
   .object({
@@ -29,7 +30,7 @@ const formSchema = z
   });
 
 export function RegisterForm() {
-  const [isLoading, setIsLoading] = useState(false);
+  const { signUp, isLoading } = useAuth();
   const navigate = useNavigate();
   
   const form = useForm<z.infer<typeof formSchema>>({
@@ -44,20 +45,10 @@ export function RegisterForm() {
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      setIsLoading(true);
-      // This would be replaced with actual registration logic
-      console.log("Registration attempt:", values);
-      
-      // Simulate registration success after a delay
-      setTimeout(() => {
-        setIsLoading(false);
-        toast.success("Account created successfully!");
-        navigate("/");
-      }, 1000);
-      
+      await signUp(values.email, values.password, values.name);
+      form.reset();
+      navigate("/auth");
     } catch (error) {
-      setIsLoading(false);
-      toast.error("Failed to create account. Please try again.");
       console.error(error);
     }
   }

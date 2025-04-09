@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Layout } from "@/components/Layout";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
@@ -7,33 +7,87 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
 
 const AccountPage = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
+  const { user, signOut } = useAuth();
   
-  // Mock profile data - would come from authentication system
   const [profile, setProfile] = useState({
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "+1 (555) 123-4567",
-    address: "123 Main St, New York, NY 10001"
+    name: "",
+    email: "",
+    phone: "",
+    address: ""
   });
   
-  const handleLogout = () => {
+  useEffect(() => {
+    if (!user) {
+      navigate("/auth");
+      return;
+    }
+
+    const fetchProfile = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("*")
+          .eq("id", user.id)
+          .single();
+        
+        if (error) throw error;
+        
+        if (data) {
+          setProfile({
+            name: data.full_name || "",
+            email: user.email || "",
+            phone: "",
+            address: ""
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching profile:", error);
+      }
+    };
+
+    fetchProfile();
+  }, [user, navigate]);
+  
+  const handleLogout = async () => {
     setIsLoading(true);
-    
-    // Simulate logout process
-    setTimeout(() => {
-      setIsLoading(false);
-      toast.success("Logged out successfully");
+    try {
+      await signOut();
       navigate("/");
-    }, 1000);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
   
-  const handleProfileUpdate = (e: React.FormEvent) => {
+  const handleProfileUpdate = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast.success("Profile updated successfully");
+    
+    if (!user) return;
+    
+    try {
+      setIsLoading(true);
+      
+      const { error } = await supabase
+        .from("profiles")
+        .update({ full_name: profile.name })
+        .eq("id", user.id);
+      
+      if (error) throw error;
+      
+      toast.success("Profile updated successfully");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      toast.error("Failed to update profile");
+    } finally {
+      setIsLoading(false);
+    }
   };
   
   const handlePasswordUpdate = (e: React.FormEvent) => {
@@ -57,6 +111,10 @@ const AccountPage = () => {
     }
   ];
   
+  if (!user) {
+    return null;
+  }
+  
   return (
     <Layout>
       <div className="container py-8 md:py-12">
@@ -67,7 +125,7 @@ const AccountPage = () => {
             
             <div className="space-y-1">
               <div className="text-sm text-muted-foreground mb-4">
-                Logged in as {profile.email}
+                Logged in as {user.email}
               </div>
               
               <Button 
@@ -124,6 +182,7 @@ const AccountPage = () => {
                           type="email" 
                           value={profile.email} 
                           onChange={(e) => setProfile({...profile, email: e.target.value})}
+                          disabled
                         />
                       </div>
                       
@@ -151,8 +210,8 @@ const AccountPage = () => {
                       />
                     </div>
                     
-                    <Button type="submit">
-                      Update Profile
+                    <Button type="submit" disabled={isLoading}>
+                      {isLoading ? "Updating..." : "Update Profile"}
                     </Button>
                   </form>
                 </div>
