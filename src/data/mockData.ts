@@ -1,0 +1,136 @@
+
+import { ProductProps } from "@/components/ProductCard";
+
+export const electronicProducts: ProductProps[] = [
+  {
+    id: "e1",
+    name: "Premium Wireless Headphones",
+    price: 249.99,
+    originalPrice: 299.99,
+    image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=2670&auto=format&fit=crop",
+    category: "Audio",
+    badge: "New",
+    rating: 4.8,
+    inStock: true,
+  },
+  {
+    id: "e2",
+    name: "Ultra HD Smart TV 55\"",
+    price: 799.99,
+    originalPrice: 999.99,
+    image: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?q=80&w=2624&auto=format&fit=crop",
+    category: "Television",
+    rating: 4.6,
+    inStock: true,
+  },
+  {
+    id: "e3",
+    name: "Professional DSLR Camera",
+    price: 1299.99,
+    image: "https://images.unsplash.com/photo-1502920917128-1aa500764cbd?q=80&w=2670&auto=format&fit=crop",
+    category: "Photography",
+    rating: 4.9,
+    inStock: true,
+  },
+  {
+    id: "e4",
+    name: "Flagship Smartphone",
+    price: 899.99,
+    originalPrice: 999.99,
+    image: "https://images.unsplash.com/photo-1592317293833-37cea1b33fef?q=80&w=2670&auto=format&fit=crop",
+    category: "Mobile",
+    badge: "Sale",
+    rating: 4.7,
+    inStock: true,
+  },
+];
+
+export const clothingProducts: ProductProps[] = [
+  {
+    id: "c1",
+    name: "Premium Cotton T-Shirt",
+    price: 39.99,
+    image: "https://images.unsplash.com/photo-1576566588028-4147f3842f27?q=80&w=2664&auto=format&fit=crop",
+    category: "Casual",
+    rating: 4.5,
+    inStock: true,
+  },
+  {
+    id: "c2",
+    name: "Designer Denim Jacket",
+    price: 129.99,
+    originalPrice: 159.99,
+    image: "https://images.unsplash.com/photo-1551537482-f2075a1d41f2?q=80&w=2670&auto=format&fit=crop",
+    category: "Outerwear",
+    rating: 4.6,
+    inStock: true,
+  },
+  {
+    id: "c3",
+    name: "Slim Fit Chino Pants",
+    price: 59.99,
+    image: "https://images.unsplash.com/photo-1624379024589-561d4a0e3896?q=80&w=2670&auto=format&fit=crop",
+    category: "Pants",
+    badge: "Best Seller",
+    rating: 4.4,
+    inStock: true,
+  },
+  {
+    id: "c4",
+    name: "Wool Winter Coat",
+    price: 199.99,
+    originalPrice: 249.99,
+    image: "https://images.unsplash.com/photo-1539533018447-63fcce2678e3?q=80&w=2574&auto=format&fit=crop",
+    category: "Outerwear",
+    rating: 4.8,
+    inStock: false,
+  },
+];
+
+export const groceryProducts: ProductProps[] = [
+  {
+    id: "g1",
+    name: "Organic Fresh Fruits Bundle",
+    price: 24.99,
+    image: "https://images.unsplash.com/photo-1610832958506-aa56368176cf?q=80&w=2670&auto=format&fit=crop",
+    category: "Fresh Produce",
+    badge: "Organic",
+    rating: 4.7,
+    inStock: true,
+  },
+  {
+    id: "g2",
+    name: "Premium Coffee Beans",
+    price: 18.99,
+    image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?q=80&w=2670&auto=format&fit=crop",
+    category: "Beverages",
+    rating: 4.9,
+    inStock: true,
+  },
+  {
+    id: "g3",
+    name: "Artisan Cheese Selection",
+    price: 32.99,
+    originalPrice: 39.99,
+    image: "https://images.unsplash.com/photo-1552767059-ce182ead6c1b?q=80&w=2670&auto=format&fit=crop",
+    category: "Dairy",
+    rating: 4.8,
+    inStock: true,
+  },
+  {
+    id: "g4",
+    name: "Gourmet Chocolate Box",
+    price: 29.99,
+    image: "https://images.unsplash.com/photo-1549007953-2f2dc0b24019?q=80&w=2670&auto=format&fit=crop",
+    category: "Confectionery",
+    badge: "Gift",
+    rating: 4.6,
+    inStock: true,
+  },
+];
+
+export const categories = [
+  { name: "Electronics", path: "/category/electronics" },
+  { name: "Clothing", path: "/category/clothing" },
+  { name: "Groceries", path: "/category/groceries" },
+];

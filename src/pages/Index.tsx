@@ -1,13 +1,32 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+
+import { Layout } from "@/components/Layout";
+import { HeroSection } from "@/components/HeroSection";
+import { FeaturedCategories } from "@/components/FeaturedCategories";
+import { CategorySection } from "@/components/CategorySection";
+import { Newsletter } from "@/components/Newsletter";
+import { electronicProducts, clothingProducts, groceryProducts, categories } from "@/data/mockData";
 
 const Index = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <Layout>
+      <HeroSection />
+      <FeaturedCategories />
+      <CategorySection 
+        category={{ name: "Electronics", path: "/category/electronics" }}
+        products={electronicProducts}
+      />
+      <div className="bg-accent/50 py-12">
+        <CategorySection 
+          category={{ name: "Clothing", path: "/category/clothing" }}
+          products={clothingProducts}
+        />
       </div>
-    </div>
+      <CategorySection 
+        category={{ name: "Groceries", path: "/category/groceries" }}
+        products={groceryProducts}
+      />
+      <Newsletter />
+    </Layout>
   );
 };
 
