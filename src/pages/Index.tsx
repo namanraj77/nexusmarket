@@ -14,16 +14,19 @@ const Index = () => {
       <CategorySection 
         category={{ name: "Electronics", path: "/category/electronics" }}
         products={electronicProducts}
+        showAll={false}
       />
       <div className="bg-accent/50 py-12">
         <CategorySection 
           category={{ name: "Clothing", path: "/category/clothing" }}
           products={clothingProducts}
+          showAll={false}
         />
       </div>
       <CategorySection 
         category={{ name: "Groceries", path: "/category/groceries" }}
         products={groceryProducts}
+        showAll={false}
       />
       <Newsletter />
     </Layout>

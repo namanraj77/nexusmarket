@@ -81,14 +81,14 @@ export function Navbar() {
         <div className="flex items-center space-x-4">
           {/* Mobile Menu Toggle */}
           {isMobile && (
-            <Button variant="ghost" size="icon" onClick={toggleMenu}>
+            <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label={isMenuOpen ? "Close menu" : "Open menu"}>
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           )}
 
           {/* Mobile Search Toggle */}
           {isMobile && (
-            <Button variant="ghost" size="icon">
+            <Button variant="ghost" size="icon" aria-label="Search">
               <Search className="h-5 w-5" />
               <span className="sr-only">Search</span>
             </Button>
@@ -96,7 +96,7 @@ export function Navbar() {
 
           {/* Wishlist */}
           <Button variant="ghost" size="icon" asChild>
-            <Link to="/wishlist">
+            <Link to="/wishlist" aria-label="Wishlist">
               <Heart className="h-5 w-5" />
               <span className="sr-only">Wishlist</span>
             </Link>
@@ -104,7 +104,7 @@ export function Navbar() {
 
           {/* Cart */}
           <Button variant="ghost" size="icon" asChild>
-            <Link to="/cart">
+            <Link to="/cart" aria-label="Shopping Cart">
               <div className="relative">
                 <ShoppingCart className="h-5 w-5" />
                 {cartCount > 0 && (
@@ -121,7 +121,7 @@ export function Navbar() {
           {user ? (
             <>
               <Button variant="ghost" size="icon" asChild>
-                <Link to="/account">
+                <Link to="/account" aria-label="Account">
                   <User className="h-5 w-5" />
                   <span className="sr-only">Account</span>
                 </Link>
@@ -129,13 +129,13 @@ export function Navbar() {
               {!isMobile && (
                 <Button variant="ghost" size="sm" onClick={handleSignOut}>
                   <LogOut className="mr-2 h-4 w-4" />
-                  Logout
+                  <span>Logout</span>
                 </Button>
               )}
             </>
           ) : (
             <Button variant="ghost" size="icon" asChild>
-              <Link to="/auth">
+              <Link to="/auth" aria-label="Login">
                 <LogIn className="h-5 w-5" />
                 <span className="sr-only">Login</span>
               </Link>
