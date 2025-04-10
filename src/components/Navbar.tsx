@@ -1,12 +1,17 @@
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, ShoppingCart, User, Menu, X, Heart, LogIn, LogOut, Smartphone, ShoppingBag } from "lucide-react";
+import { Search, ShoppingCart, User, Menu, X, Heart, LogIn, LogOut, Smartphone, ShoppingBag, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useCart } from "@/context/CartContext";
 import { useAuth } from "@/context/AuthContext";
+import { 
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 export function Navbar() {
   const isMobile = useIsMobile();
@@ -15,6 +20,9 @@ export function Navbar() {
   const { user, signOut } = useAuth();
   const { getCartCount } = useCart();
   const navigate = useNavigate();
+  
+  // New state for category collapsibles
+  const [openCategory, setOpenCategory] = useState<string | null>(null);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
@@ -28,14 +36,25 @@ export function Navbar() {
     }
   };
 
-  const categories = [
+  const toggleCategory = (category: string) => {
+    setOpenCategory(openCategory === category ? null : category);
+  };
+
+  const mainCategories = [
     { name: "All", path: "/" },
-    { name: "Electronics", path: "/category/electronics" },
-    { name: "Mobile Phones", path: "/category/mobile-phones", icon: <Smartphone className="mr-1 h-4 w-4" aria-hidden="true" /> },
+    { name: "Electronics", path: "/category/electronics", hasSubcategories: true },
     { name: "Clothing", path: "/category/clothing" },
     { name: "Fashion", path: "/category/fashion", icon: <ShoppingBag className="mr-1 h-4 w-4" aria-hidden="true" /> },
     { name: "Groceries", path: "/category/groceries" },
   ];
+
+  const subcategories = {
+    "Electronics": [
+      { name: "Mobile Phones", path: "/category/mobile-phones", icon: <Smartphone className="mr-1 h-4 w-4" aria-hidden="true" /> },
+      { name: "Laptops", path: "/category/electronics/laptops" },
+      { name: "Audio", path: "/category/electronics/audio" },
+    ]
+  };
 
   const cartCount = getCartCount();
 
@@ -50,15 +69,38 @@ export function Navbar() {
         {/* Desktop Nav */}
         {!isMobile && (
           <nav className="mx-6 flex items-center space-x-4 lg:space-x-6">
-            {categories.map((category) => (
-              <Link
-                key={category.name}
-                to={category.path}
-                className="flex items-center text-sm font-medium transition-colors hover:text-primary"
-              >
-                {category.icon && category.icon}
-                <span>{category.name}</span>
-              </Link>
+            {mainCategories.map((category) => (
+              <div key={category.name} className="relative group">
+                {category.hasSubcategories ? (
+                  <Collapsible>
+                    <CollapsibleTrigger className="flex items-center text-sm font-medium transition-colors hover:text-primary">
+                      {category.icon && category.icon}
+                      <span>{category.name}</span>
+                      <ChevronDown className="ml-1 h-4 w-4" />
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className="absolute z-50 bg-white border rounded-md shadow-md py-2 min-w-[180px] mt-1">
+                      {subcategories[category.name as keyof typeof subcategories]?.map((subcat) => (
+                        <Link
+                          key={subcat.name}
+                          to={subcat.path}
+                          className="flex items-center px-4 py-2 text-sm hover:bg-accent"
+                        >
+                          {subcat.icon && subcat.icon}
+                          <span>{subcat.name}</span>
+                        </Link>
+                      ))}
+                    </CollapsibleContent>
+                  </Collapsible>
+                ) : (
+                  <Link
+                    to={category.path}
+                    className="flex items-center text-sm font-medium transition-colors hover:text-primary"
+                  >
+                    {category.icon && category.icon}
+                    <span>{category.name}</span>
+                  </Link>
+                )}
+              </div>
             ))}
           </nav>
         )}
@@ -86,6 +128,7 @@ export function Navbar() {
           {isMobile && (
             <Button variant="ghost" size="icon" onClick={toggleMenu} aria-label={isMenuOpen ? "Close menu" : "Open menu"}>
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              <span className="sr-only">{isMenuOpen ? "Close menu" : "Open menu"}</span>
             </Button>
           )}
 
@@ -151,16 +194,56 @@ export function Navbar() {
       {isMobile && isMenuOpen && (
         <div className="border-t border-border bg-background p-4 absolute w-full animate-fade-in">
           <nav className="grid gap-2">
-            {categories.map((category) => (
-              <Link
-                key={category.name}
-                to={category.path}
-                className="flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {category.icon && category.icon}
-                <span>{category.name}</span>
-              </Link>
+            {mainCategories.map((category) => (
+              <div key={category.name} className="w-full">
+                {category.hasSubcategories ? (
+                  <Collapsible>
+                    <div className="flex items-center justify-between">
+                      <Link
+                        to={category.path}
+                        className="flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {category.icon && category.icon}
+                        <span>{category.name}</span>
+                      </Link>
+                      <CollapsibleTrigger 
+                        onClick={() => toggleCategory(category.name)}
+                        className="p-2 hover:bg-accent rounded-md"
+                      >
+                        {openCategory === category.name ? (
+                          <ChevronUp className="h-4 w-4" />
+                        ) : (
+                          <ChevronDown className="h-4 w-4" />
+                        )}
+                      </CollapsibleTrigger>
+                    </div>
+                    <CollapsibleContent className="pl-4 mt-1 border-l border-accent">
+                      {subcategories[category.name as keyof typeof subcategories]?.map((subcat) => (
+                        <Link
+                          key={subcat.name}
+                          to={subcat.path}
+                          className="flex items-center rounded-md px-3 py-2 text-sm hover:bg-accent"
+                          onClick={() => setIsMenuOpen(false)}
+                        >
+                          {subcat.icon && subcat.icon}
+                          <span>{subcat.name}</span>
+                        </Link>
+                      ))}
+                    </CollapsibleContent>
+                  </Collapsible>
+                ) : (
+                  <Link
+                    key={category.name}
+                    to={category.path}
+                    className="flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {category.icon && category.icon}
+                    <span>{category.name}</span>
+                  </Link>
+                )}
+              </div>
             ))}
             
             {user && (
