@@ -17,10 +17,22 @@ const categories: CategoryProps[] = [
     path: "/category/electronics",
   },
   {
+    name: "Mobile Phones",
+    description: "Smartphones and accessories",
+    image: "https://images.unsplash.com/photo-1598327105666-5b89351aff97?q=80&w=2670&auto=format&fit=crop",
+    path: "/category/mobile-phones",
+  },
+  {
     name: "Clothing",
     description: "Fashion for all seasons",
     image: "https://images.unsplash.com/photo-1516762689617-e1cffcef479d?q=80&w=2622&auto=format&fit=crop",
     path: "/category/clothing",
+  },
+  {
+    name: "Fashion",
+    description: "Accessories and trendy items",
+    image: "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?q=80&w=2670&auto=format&fit=crop",
+    path: "/category/fashion",
   },
   {
     name: "Groceries",
@@ -37,7 +49,7 @@ export function FeaturedCategories() {
         <h2 className="mb-6 text-center text-2xl font-bold tracking-tight md:text-3xl">
           Shop by Category
         </h2>
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
           {categories.map((category) => (
             <Link key={category.name} to={category.path} className="block h-full">
               <Card className="h-full overflow-hidden transition-all duration-300 hover:shadow-lg">

@@ -5,7 +5,13 @@ import { FeaturedCategories } from "@/components/FeaturedCategories";
 import { CategorySection } from "@/components/CategorySection";
 import { Testimonials } from "@/components/Testimonials";
 import { Newsletter } from "@/components/Newsletter";
-import { electronicProducts, clothingProducts, groceryProducts, categories } from "@/data/mockData";
+import { 
+  electronicProducts, 
+  mobilePhoneProducts,
+  clothingProducts, 
+  groceryProducts, 
+  fashionProducts
+} from "@/data/mockData";
 
 const Index = () => {
   return (
@@ -19,8 +25,20 @@ const Index = () => {
       />
       <div className="bg-accent/50 py-12">
         <CategorySection 
-          category={{ name: "Clothing", path: "/category/clothing" }}
-          products={clothingProducts}
+          category={{ name: "Mobile Phones", path: "/category/mobile-phones" }}
+          products={mobilePhoneProducts}
+          showAll={false}
+        />
+      </div>
+      <CategorySection 
+        category={{ name: "Clothing", path: "/category/clothing" }}
+        products={clothingProducts}
+        showAll={false}
+      />
+      <div className="bg-accent/50 py-12">
+        <CategorySection 
+          category={{ name: "Fashion", path: "/category/fashion" }}
+          products={fashionProducts}
           showAll={false}
         />
       </div>

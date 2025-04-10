@@ -1,7 +1,7 @@
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, ShoppingCart, User, Menu, X, Heart, LogIn, LogOut } from "lucide-react";
+import { Search, ShoppingCart, User, Menu, X, Heart, LogIn, LogOut, Smartphone, ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -31,7 +31,9 @@ export function Navbar() {
   const categories = [
     { name: "All", path: "/" },
     { name: "Electronics", path: "/category/electronics" },
+    { name: "Mobile Phones", path: "/category/mobile-phones", icon: <Smartphone className="mr-1 h-4 w-4" aria-hidden="true" /> },
     { name: "Clothing", path: "/category/clothing" },
+    { name: "Fashion", path: "/category/fashion", icon: <ShoppingBag className="mr-1 h-4 w-4" aria-hidden="true" /> },
     { name: "Groceries", path: "/category/groceries" },
   ];
 
@@ -52,9 +54,10 @@ export function Navbar() {
               <Link
                 key={category.name}
                 to={category.path}
-                className="text-sm font-medium transition-colors hover:text-primary"
+                className="flex items-center text-sm font-medium transition-colors hover:text-primary"
               >
-                {category.name}
+                {category.icon && category.icon}
+                <span>{category.name}</span>
               </Link>
             ))}
           </nav>
@@ -155,7 +158,8 @@ export function Navbar() {
                 className="flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent"
                 onClick={() => setIsMenuOpen(false)}
               >
-                {category.name}
+                {category.icon && category.icon}
+                <span>{category.name}</span>
               </Link>
             ))}
             

@@ -9,7 +9,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
 import { CheckIcon, XIcon, SlidersHorizontal } from "lucide-react";
-import { electronicProducts, clothingProducts, groceryProducts } from "@/data/mockData";
+import { 
+  electronicProducts, 
+  mobilePhoneProducts, 
+  clothingProducts, 
+  groceryProducts, 
+  fashionProducts 
+} from "@/data/mockData";
 
 const CategoryPage = () => {
   const { category } = useParams<{ category: string }>();
@@ -27,10 +33,20 @@ const CategoryPage = () => {
       categoryTitle = "Electronics";
       categoryDescription = "Discover the latest in tech and electronics";
       break;
+    case "mobile-phones":
+      products = mobilePhoneProducts;
+      categoryTitle = "Mobile Phones";
+      categoryDescription = "Explore our range of smartphones and accessories";
+      break;
     case "clothing":
       products = clothingProducts;
       categoryTitle = "Clothing";
       categoryDescription = "Find your perfect style with our clothing collection";
+      break;
+    case "fashion":
+      products = fashionProducts;
+      categoryTitle = "Fashion";
+      categoryDescription = "Trendy accessories and fashion items for every occasion";
       break;
     case "groceries":
       products = groceryProducts;
@@ -38,7 +54,13 @@ const CategoryPage = () => {
       categoryDescription = "Fresh and premium groceries delivered to your door";
       break;
     default:
-      products = [...electronicProducts, ...clothingProducts, ...groceryProducts];
+      products = [
+        ...electronicProducts, 
+        ...mobilePhoneProducts, 
+        ...clothingProducts, 
+        ...fashionProducts, 
+        ...groceryProducts
+      ];
       categoryTitle = "All Products";
       categoryDescription = "Browse our complete collection of premium products";
   }
