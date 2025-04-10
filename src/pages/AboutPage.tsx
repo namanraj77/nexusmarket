@@ -31,6 +31,22 @@ const AboutPage = () => {
               convenient platform. We believe that shopping should be enjoyable, transparent, and accessible to everyone.
             </p>
 
+            <h2 className="text-2xl font-semibold mt-8">Our Leadership</h2>
+            <div className="grid md:grid-cols-3 gap-6 mt-4">
+              <div className="bg-accent/30 p-4 rounded-lg">
+                <h3 className="text-xl font-medium">Naman Raj</h3>
+                <p className="text-muted-foreground">Founder & CEO</p>
+              </div>
+              <div className="bg-accent/30 p-4 rounded-lg">
+                <h3 className="text-xl font-medium">Ayush Ranjan</h3>
+                <p className="text-muted-foreground">Planning</p>
+              </div>
+              <div className="bg-accent/30 p-4 rounded-lg">
+                <h3 className="text-xl font-medium">Shivam Singh</h3>
+                <p className="text-muted-foreground">Planning</p>
+              </div>
+            </div>
+
             <h2 className="text-2xl font-semibold mt-8">Our Team</h2>
             <p>
               Our diverse team of experts brings together years of experience in retail, technology, and
