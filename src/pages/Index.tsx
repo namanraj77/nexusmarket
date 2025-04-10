@@ -3,6 +3,7 @@ import { Layout } from "@/components/Layout";
 import { HeroSection } from "@/components/HeroSection";
 import { FeaturedCategories } from "@/components/FeaturedCategories";
 import { CategorySection } from "@/components/CategorySection";
+import { Testimonials } from "@/components/Testimonials";
 import { Newsletter } from "@/components/Newsletter";
 import { electronicProducts, clothingProducts, groceryProducts, categories } from "@/data/mockData";
 
@@ -28,6 +29,7 @@ const Index = () => {
         products={groceryProducts}
         showAll={false}
       />
+      <Testimonials />
       <Newsletter />
     </Layout>
   );
