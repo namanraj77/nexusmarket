@@ -7,7 +7,13 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heart, ShoppingCart, AlertCircle, TruckIcon, RotateCcw, Shield } from "lucide-react";
-import { electronicProducts, clothingProducts, groceryProducts } from "@/data/mockData";
+import { 
+  electronicProducts, 
+  mobilePhoneProducts,
+  clothingProducts, 
+  fashionProducts,
+  groceryProducts 
+} from "@/data/mockData";
 import { useCart } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 
@@ -18,7 +24,14 @@ const ProductPage = () => {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
 
   // Find the product with the matching ID from all product categories
-  const allProducts = [...electronicProducts, ...clothingProducts, ...groceryProducts];
+  const allProducts = [
+    ...electronicProducts, 
+    ...mobilePhoneProducts,
+    ...clothingProducts, 
+    ...fashionProducts,
+    ...groceryProducts
+  ];
+  
   const product = allProducts.find((p) => p.id === id);
 
   // Get similar products from the same category
